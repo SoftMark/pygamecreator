@@ -1,4 +1,3 @@
-import pygame
 from pygamecreator.display import Display
 from pygamecreator.static.keys import *
 from pygamecreator.game_loop import GameLoop, game_loop_action
