@@ -1,15 +1,22 @@
 import pygame
-from pygamecreator.static.game_loop import DEFAULT_DELAY_TIME, EventTypes
+
 from abc import ABC, abstractmethod
 from bson import ObjectId
 
+from pygamecreator.display import Display
+from pygamecreator.static.game_loop import DEFAULT_DELAY_TIME, EventTypes
+
 
 class GameLoop():
-    def __init__(self, delay=DEFAULT_DELAY_TIME):
+    def __init__(self, display=Display(), delay=DEFAULT_DELAY_TIME):
         """
+        :param display: game display
+        :type display: Display
+
         :param delay: delay in milliseconds
         :type delay: int
         """
+        self.display = display
         self.delay = delay
         self._run = True
         self._events = []
@@ -51,6 +58,7 @@ class GameLoop():
                 elif isinstance(event, GameLoopInitializedEvent):
                     event.action.run_action()
             pygame.display.update()
+            self.display.fill()
         pygame.quit()
 
 
@@ -87,7 +95,10 @@ class GameLoopInitializedEvent(GameLoopEvent):
         :param action: actions that run when event triggered
         :type action: GameLoopAction
         """
-        super().__init__(event_type=EventTypes.LOOP_INITIALIZED.name, action=action)
+        super().__init__(
+            event_type=EventTypes.LOOP_INITIALIZED.name,
+            action=action
+        )
 
 
 class KeyPressedEvent(GameLoopEvent):
@@ -99,5 +110,8 @@ class KeyPressedEvent(GameLoopEvent):
         :param action: actions that run when event triggered
         :type action: GameLoopAction
         """
-        super().__init__(event_type=EventTypes.KEY_PRESSED.name, action=action)
+        super().__init__(
+            event_type=EventTypes.KEY_PRESSED.name,
+            action=action
+        )
         self.key = key
