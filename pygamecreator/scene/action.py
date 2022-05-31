@@ -8,7 +8,7 @@ class SceneAction(ABC):
         pass
 
 
-def game_loop_action(foo):
+def scene_action(foo):
     return type(
         f"SceneAction{ObjectId()}",
         (SceneAction,),

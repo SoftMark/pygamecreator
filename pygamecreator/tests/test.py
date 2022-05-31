@@ -1,6 +1,6 @@
 from pygamecreator.static.keys import *
 from pygamecreator.game_loop import GameLoop
-from pygamecreator.scene.action import game_loop_action
+from pygamecreator.scene.action import scene_action
 from pygamecreator.scene.scene import Scene
 from pygamecreator.scene.units.sprites import SpritesStorage
 from pygamecreator.scene.units.units import MoveAbleUnit
@@ -19,19 +19,19 @@ sprites_storage = SpritesStorage.from_dict(
 PLAYER = MoveAbleUnit(x=0, y=0, sprites_storage=sprites_storage, animation_frequency=0.1, step=10)
 
 
-@game_loop_action
+@scene_action
 def move_right():
     PLAYER.set_sprites_state(WALK_STATE)
     PLAYER.move_right()
 
 
-@game_loop_action
+@scene_action
 def move_left():
     PLAYER.set_sprites_state(WALK_STATE)
     PLAYER.move_left()
 
 
-@game_loop_action
+@scene_action
 def sleep():
     PLAYER.set_sprites_state(SLEEP_STATE)
 
