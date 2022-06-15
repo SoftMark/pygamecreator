@@ -4,7 +4,7 @@ from pygamecreator.settings import FPS
 
 
 class BaseUnit:
-    def __init__(self, x, y, sprites_storage):
+    def __init__(self, x=0, y=0):
         """
         :param x: unit horizontal position in pixels
         :type x: int
@@ -12,15 +12,35 @@ class BaseUnit:
         :param y: unit vertical position in pixels
         :type y: int
 
-        :param sprites_storage: unit sprites
-        :type sprites_storage: pygamecreator.units.sprites.SpritesStorage
-
         """
         self.id = ObjectId()
         self._x = x
         self._y = y
+
+    @property
+    def position(self):
+        return self._x, self._y
+
+    def set_position(self, position):
+        self._x = position[0]
+        self._y = position[1]
+
+
+class RenderAbleUnit(BaseUnit):
+    def __init__(self, x, y, sprites_storage, animation_frequency=0.1):
+        """
+        :param sprites_storage: unit sprites
+        :type sprites_storage: pygamecreator.scene.units.sprites.SpritesStorage
+
+        :param animation_frequency: how often unit should change sprite in seconds
+        :type animation_frequency: float
+        """
+        super().__init__(x, y)
         self._sprites_storage = sprites_storage
-        self._current_sprite = self._current_sprites.current_sprite
+        self.current_sprite = self._current_sprites.current_sprite
+        self._animate_enabled = True
+        self._animation_frequency = animation_frequency
+        self._animation_counter = 0
 
     @property
     def _current_sprites(self):
@@ -28,22 +48,10 @@ class BaseUnit:
 
     def _sprite_shift(self):
         self._current_sprites.shift()
-        self._current_sprite = self._current_sprites.current_sprite
+        self.current_sprite = self._current_sprites.current_sprite
 
     def set_sprites_state(self, state_name):
         self._sprites_storage.set_sprites_by_state(state_name)
-
-
-class RenderAbleUnit(BaseUnit):
-    def __init__(self, x, y, sprites_storage, animation_frequency=0.1):
-        """
-        :param animation_frequency: how often unit should change sprite in seconds
-        :type animation_frequency: float
-        """
-        super().__init__(x, y, sprites_storage)
-        self._animate_enabled = True
-        self._animation_frequency = animation_frequency
-        self._animation_counter = 0
 
     def _process_animation(self):
         time_spent = self._animation_counter / FPS
@@ -64,7 +72,7 @@ class RenderAbleUnit(BaseUnit):
         self._on_pre_render()
         if self._animate_enabled:
             self._process_animation()
-        display.win.blit(self._current_sprite.surface, (self._x, self._y))
+        display.win.blit(self.current_sprite.surface, (self._x, self._y))
 
 
 class MoveAbleUnit(RenderAbleUnit):

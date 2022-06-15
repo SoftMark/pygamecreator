@@ -13,7 +13,11 @@ class Sprite:
         :param img_path: Path to sprite image
         :type img_path: str
         """
-        self.surface = pygame.image.load(os.path.join(MEDIA_ROOT, img_path))
+        self.img_path = os.path.join(MEDIA_ROOT, img_path)
+        self.surface = pygame.image.load(self.img_path)
+
+    def renew(self):
+        self.surface = pygame.image.load(self.img_path)
 
 
 class SpritesMember(Sprite):

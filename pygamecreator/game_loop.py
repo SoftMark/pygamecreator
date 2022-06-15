@@ -42,10 +42,10 @@ class GameLoop:
                 if event.type == pygame.QUIT:
                     self.stop()
             pygame.time.delay(self.delay)
+            self.display.fill()
             self._current_scene.process_events()
             self._current_scene.render(self.display)
             pygame.display.update()
-            self.display.fill()
             self._clock.tick(FPS)
         pygame.quit()
 
